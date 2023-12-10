@@ -8,14 +8,10 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 
 $context = new ZMQContext();
-$socket = $context->getSocket(ZMQ::SOCKET_PUSH, 'my pusher', function ($socket) {
+$socket = $context->getSocket(ZMQ::SOCKET_PUSH, 'pusher', function ($socket) {
     print_r($socket);
 });
 
-echo '<pre>';
-print_r($socket);
-echo '</pre>';
-// exit;
 
 $socket->connect("tcp://localhost:9000");
 
@@ -26,8 +22,11 @@ $socket->connect("tcp://localhost:9000");
 
 $socket->send("Time is " . date('Y-m-d H:i:s'), ZMQ::MODE_NOBLOCK);
 
-$socket->disconnect("tcp://localhost:9000");
+echo '<pre>';
+print_r($socket);
+echo '</pre>';
 
+$socket->disconnect("tcp://localhost:9000");
 
 
 echo "Sent: Time is " . date('Y-m-d H:i:s') . "\n";
