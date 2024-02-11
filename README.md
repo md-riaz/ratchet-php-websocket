@@ -16,7 +16,7 @@
       ```bash
       sudo apt install php8.2-zmq
       ```
-
+https://www.devart.com/dbforge/postgresql/how-to-install-postgresql-on-linux/
 2. **Embrace Composer for Dependency Management:**
     - Include `php-zmq` in your `composer.json` file.
     - Run `composer update` to install dependencies.
