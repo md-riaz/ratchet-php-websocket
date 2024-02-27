@@ -1,15 +1,18 @@
 <?php
 
-use Ratchet\Http\HttpServer;
-use Ratchet\Server\IoServer;
-use Ratchet\WebSocket\WsServer;
-use React\Socket\SocketServer;
-use React\ZMQ\Context;
-
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-$loop = React\EventLoop\Loop::get();
-$socketServer = new \MyApp\SocketServer();
+use Ratchet\WebSocket\WsServer;
+use React\Socket\SocketServer;
+use Ratchet\Http\HttpServer;
+use React\ZMQ\Context;
+use Ratchet\Server\IoServer;
+use React\EventLoop\Loop;
+use MyApp\Chat;
+
+
+$loop = Loop::get();
+$chatWSServer = new Chat();
 
 // Listen for the web server to make a ZeroMQ push after an ajax request
 $context = new Context($loop);
@@ -22,12 +25,12 @@ try {
     die();
 }
 
-$pull->on('message', array($socketServer, 'handleZmqMessage'));
+$pull->on('message', [$chatWSServer, 'onZmqMessage']);
 
 // Set up our WebSocket server for clients wanting real-time updates
-
 $webSock = new SocketServer('0.0.0.0:8080'); // Binding to 0.0.0.0 means remotes can connect
-$wsServer = new WsServer($socketServer);
+
+$wsServer = new WsServer($chatWSServer);
 $webServer = new IoServer(
     new HttpServer($wsServer),
     $webSock
@@ -36,7 +39,3 @@ $webServer = new IoServer(
 $wsServer->enableKeepAlive($loop); // Pass the event loop to enableKeepAlive
 
 $loop->run();
-
-
-// run with ulimit -n 10000; exec php7.4 /var/www/websocket/bin/server.php
-// php7.4 /usr/local/bin/composer

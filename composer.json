@@ -1,13 +1,12 @@
 {
-  "autoload": {
-    "psr-4": {
-      "MyApp\\": "src"
+    "autoload": {
+        "psr-4": {
+            "MyApp\\": "src"
+        }
+    },
+    "require": {
+        "cboden/ratchet": "^0.4.4",
+        "react/zmq": "^0.4.0",
+        "symfony/polyfill-php80": "^1.28"
     }
-  },
-  "require": {
-    "cboden/ratchet": "^0.4.4",
-    "react/zmq": "^0.4.0",
-    "ext-zmq": "*",
-    "ext-pdo": "*"
-  }
 }
